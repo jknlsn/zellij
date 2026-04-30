@@ -302,6 +302,7 @@ fn create_new_screen(
         scrollback_lines_to_serialize,
         styled_underlines,
         osc8_hyperlinks,
+        true,
         arrow_fonts,
         layout_dir,
         explicitly_disable_kitty_keyboard_protocol,
@@ -5421,6 +5422,7 @@ fn create_new_screen_with_message_capture(
         scrollback_lines_to_serialize,
         styled_underlines,
         osc8_hyperlinks,
+        true,
         arrow_fonts,
         layout_dir,
         explicitly_disable_kitty_keyboard_protocol,
@@ -8495,6 +8497,7 @@ fn create_new_screen_with_forward_capture(size: Size) -> (Screen, ForwardCapture
         scrollback_lines_to_serialize,
         styled_underlines,
         osc8_hyperlinks,
+        true,
         arrow_fonts,
         layout_dir,
         explicitly_disable_kitty_keyboard_protocol,
@@ -9079,6 +9082,7 @@ fn create_new_screen_with_theme_capture(size: Size) -> (Screen, ThemeCapture) {
         true,
         true,
         true,
+        true,
         None,
         false,
         true,
@@ -9311,6 +9315,7 @@ fn new_terminal_pane_for_pause_test(pid: u32) -> TerminalPane {
         None,
         None,
         false,
+        true,
         true,
         true,
         true,
@@ -9557,6 +9562,7 @@ fn create_non_mirrored_screen(size: Size) -> Screen {
         None,  // scrollback_lines_to_serialize
         true,  // styled_underlines
         true,  // osc8_hyperlinks
+        false, // session_name_in_terminal_title
         true,  // arrow_fonts
         None,  // layout_dir
         false, // explicitly_disable_kitty_keyboard_protocol

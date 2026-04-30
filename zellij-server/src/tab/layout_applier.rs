@@ -43,6 +43,7 @@ pub struct LayoutApplier<'a> {
     arrow_fonts: bool,
     styled_underlines: bool,
     osc8_hyperlinks: bool,
+    session_name_in_terminal_title: bool,
     explicitly_disable_kitty_keyboard_protocol: bool,
     blocking_terminal: Option<(u32, NotificationEnd)>,
 }
@@ -68,6 +69,7 @@ impl<'a> LayoutApplier<'a> {
         arrow_fonts: bool,
         styled_underlines: bool,
         osc8_hyperlinks: bool,
+        session_name_in_terminal_title: bool,
         explicitly_disable_kitty_keyboard_protocol: bool,
         blocking_terminal: Option<(u32, NotificationEnd)>,
     ) -> Self {
@@ -102,6 +104,7 @@ impl<'a> LayoutApplier<'a> {
             arrow_fonts,
             styled_underlines,
             osc8_hyperlinks,
+            session_name_in_terminal_title,
             explicitly_disable_kitty_keyboard_protocol,
             blocking_terminal,
         }
@@ -539,6 +542,7 @@ impl<'a> LayoutApplier<'a> {
             self.debug,
             self.arrow_fonts,
             self.styled_underlines,
+            self.session_name_in_terminal_title,
         );
         if let Some(pane_initial_contents) = &layout.pane_initial_contents {
             new_plugin.handle_pty_bytes(pane_initial_contents.as_bytes().into());
@@ -588,6 +592,7 @@ impl<'a> LayoutApplier<'a> {
             self.debug,
             self.arrow_fonts,
             self.styled_underlines,
+            self.session_name_in_terminal_title,
         );
         if let Some(pane_initial_contents) = &floating_pane_layout.pane_initial_contents {
             new_pane.handle_pty_bytes(pane_initial_contents.as_bytes().into());
@@ -642,6 +647,7 @@ impl<'a> LayoutApplier<'a> {
             self.arrow_fonts,
             self.styled_underlines,
             self.osc8_hyperlinks,
+            self.session_name_in_terminal_title,
             self.explicitly_disable_kitty_keyboard_protocol,
             None,
         );
@@ -718,6 +724,7 @@ impl<'a> LayoutApplier<'a> {
             self.arrow_fonts,
             self.styled_underlines,
             self.osc8_hyperlinks,
+            self.session_name_in_terminal_title,
             self.explicitly_disable_kitty_keyboard_protocol,
             notification_end,
         );

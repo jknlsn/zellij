@@ -156,6 +156,7 @@ fn create_layout_applier_fixtures(
     bool,
     bool,
     bool,
+    bool,
 ) {
     let viewport = Rc::new(RefCell::new(Viewport {
         x: 0,
@@ -227,6 +228,7 @@ fn create_layout_applier_fixtures(
     let arrow_fonts = true;
     let styled_underlines = true;
     let osc8_hyperlinks = true;
+    let session_name_in_terminal_title = true;
     let explicitly_disable_kitty_keyboard_protocol = false;
 
     (
@@ -249,6 +251,7 @@ fn create_layout_applier_fixtures(
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     )
 }
@@ -273,6 +276,7 @@ fn create_layout_applier_fixtures_with_receivers(
     PaneFrameStyle,
     Option<PaneId>,
     Box<dyn ServerOsApi>,
+    bool,
     bool,
     bool,
     bool,
@@ -357,6 +361,7 @@ fn create_layout_applier_fixtures_with_receivers(
     let arrow_fonts = true;
     let styled_underlines = true;
     let osc8_hyperlinks = true;
+    let session_name_in_terminal_title = true;
     let explicitly_disable_kitty_keyboard_protocol = false;
 
     (
@@ -379,6 +384,7 @@ fn create_layout_applier_fixtures_with_receivers(
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         mock_pty_receiver,
         mock_plugin_receiver,
@@ -581,6 +587,7 @@ fn test_apply_empty_layout() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -604,6 +611,7 @@ fn test_apply_empty_layout() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None, // blocking_terminal
     );
@@ -666,6 +674,7 @@ fn test_apply_simple_two_pane_layout() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -689,6 +698,7 @@ fn test_apply_simple_two_pane_layout() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -752,6 +762,7 @@ fn test_apply_three_pane_layout() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -775,6 +786,7 @@ fn test_apply_three_pane_layout() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -837,6 +849,7 @@ fn test_apply_horizontal_split_with_sizes() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -860,6 +873,7 @@ fn test_apply_horizontal_split_with_sizes() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -922,6 +936,7 @@ fn test_apply_vertical_split_with_sizes() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -945,6 +960,7 @@ fn test_apply_vertical_split_with_sizes() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -1010,6 +1026,7 @@ fn test_apply_nested_layout() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -1033,6 +1050,7 @@ fn test_apply_nested_layout() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -1094,6 +1112,7 @@ fn test_apply_layout_with_focus() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -1117,6 +1136,7 @@ fn test_apply_layout_with_focus() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -1181,6 +1201,7 @@ fn test_apply_layout_with_commands() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -1204,6 +1225,7 @@ fn test_apply_layout_with_commands() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -1265,6 +1287,7 @@ fn test_apply_layout_with_named_panes() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -1288,6 +1311,7 @@ fn test_apply_layout_with_named_panes() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -1349,6 +1373,7 @@ fn test_apply_layout_with_borderless_panes() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -1372,6 +1397,7 @@ fn test_apply_layout_with_borderless_panes() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -1442,6 +1468,7 @@ fn test_apply_layout_with_floating_panes() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -1465,6 +1492,7 @@ fn test_apply_layout_with_floating_panes() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -1536,6 +1564,7 @@ fn test_apply_layout_with_floating_pane_with_command() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -1559,6 +1588,7 @@ fn test_apply_layout_with_floating_pane_with_command() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -1644,6 +1674,7 @@ fn test_apply_layout_with_mixed_tiled_and_floating_panes() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -1667,6 +1698,7 @@ fn test_apply_layout_with_mixed_tiled_and_floating_panes() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -1735,6 +1767,7 @@ fn test_reapply_layout_exact_match() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -1758,6 +1791,7 @@ fn test_reapply_layout_exact_match() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -1838,6 +1872,7 @@ fn test_reapply_layout_logical_position_match() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -1861,6 +1896,7 @@ fn test_reapply_layout_logical_position_match() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -1942,6 +1978,7 @@ fn test_reapply_layout_with_more_positions() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -1965,6 +2002,7 @@ fn test_reapply_layout_with_more_positions() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -2051,6 +2089,7 @@ fn test_reapply_floating_pane_layout() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -2074,6 +2113,7 @@ fn test_reapply_floating_pane_layout() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -2164,6 +2204,7 @@ fn test_apply_complex_nested_layout() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -2187,6 +2228,7 @@ fn test_apply_complex_nested_layout() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -2253,6 +2295,7 @@ fn test_apply_layout_with_stacked_panes() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -2276,6 +2319,7 @@ fn test_apply_layout_with_stacked_panes() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -2348,6 +2392,7 @@ fn test_apply_layout_with_multiple_stacks() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -2371,6 +2416,7 @@ fn test_apply_layout_with_multiple_stacks() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -2450,6 +2496,7 @@ fn test_apply_layout_with_plugin_panes() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -2473,6 +2520,7 @@ fn test_apply_layout_with_plugin_panes() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -2558,6 +2606,7 @@ fn test_apply_layout_with_mixed_plugin_and_terminal_panes() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -2581,6 +2630,7 @@ fn test_apply_layout_with_mixed_plugin_and_terminal_panes() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -2649,6 +2699,7 @@ fn test_apply_layout_with_missing_plugin_ids() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -2672,6 +2723,7 @@ fn test_apply_layout_with_missing_plugin_ids() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -2726,6 +2778,7 @@ fn test_apply_layout_with_excess_terminal_ids() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -2749,6 +2802,7 @@ fn test_apply_layout_with_excess_terminal_ids() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -2823,6 +2877,7 @@ fn test_override_layout_basic_with_both_tiled_and_floating() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         pty_receiver,
         plugin_receiver,
@@ -2848,6 +2903,7 @@ fn test_override_layout_basic_with_both_tiled_and_floating() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -2967,6 +3023,7 @@ fn test_override_layout_hide_floating_panes_true() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         pty_receiver,
         plugin_receiver,
@@ -2992,6 +3049,7 @@ fn test_override_layout_hide_floating_panes_true() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -3099,6 +3157,7 @@ fn test_override_layout_show_floating_panes() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         pty_receiver,
         plugin_receiver,
@@ -3124,6 +3183,7 @@ fn test_override_layout_show_floating_panes() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -3237,6 +3297,7 @@ fn test_override_tiled_exact_match_preservation_commands() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         pty_receiver,
         plugin_receiver,
@@ -3262,6 +3323,7 @@ fn test_override_tiled_exact_match_preservation_commands() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -3364,6 +3426,7 @@ fn test_override_tiled_exact_match_preservation_plugins() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         pty_receiver,
         plugin_receiver,
@@ -3389,6 +3452,7 @@ fn test_override_tiled_exact_match_preservation_plugins() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -3489,6 +3553,7 @@ fn test_override_tiled_all_panes_closed_no_matches() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         pty_receiver,
         plugin_receiver,
@@ -3514,6 +3579,7 @@ fn test_override_tiled_all_panes_closed_no_matches() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -3619,6 +3685,7 @@ fn test_override_tiled_mixed_some_matches_some_new() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         pty_receiver,
         plugin_receiver,
@@ -3644,6 +3711,7 @@ fn test_override_tiled_mixed_some_matches_some_new() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -3740,6 +3808,7 @@ fn test_override_tiled_new_panes_for_unmatched_positions() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -3763,6 +3832,7 @@ fn test_override_tiled_new_panes_for_unmatched_positions() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -3851,6 +3921,7 @@ fn test_override_tiled_focus_on_new_pane() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -3874,6 +3945,7 @@ fn test_override_tiled_focus_on_new_pane() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -3962,6 +4034,7 @@ fn test_override_tiled_focus_when_focused_pane_closed() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         pty_receiver,
         plugin_receiver,
@@ -3987,6 +4060,7 @@ fn test_override_tiled_focus_when_focused_pane_closed() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -4088,6 +4162,7 @@ fn test_override_tiled_empty_layout_closes_all() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         pty_receiver,
         plugin_receiver,
@@ -4113,6 +4188,7 @@ fn test_override_tiled_empty_layout_closes_all() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -4227,6 +4303,7 @@ fn test_override_floating_exact_match_preservation() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         pty_receiver,
         plugin_receiver,
@@ -4252,6 +4329,7 @@ fn test_override_floating_exact_match_preservation() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -4370,6 +4448,7 @@ fn test_override_floating_all_closed_no_matches() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         pty_receiver,
         plugin_receiver,
@@ -4395,6 +4474,7 @@ fn test_override_floating_all_closed_no_matches() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -4515,6 +4595,7 @@ fn test_override_floating_new_panes_created() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -4538,6 +4619,7 @@ fn test_override_floating_new_panes_created() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -4659,6 +4741,7 @@ fn test_override_floating_focus_handling() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         pty_receiver,
         plugin_receiver,
@@ -4684,6 +4767,7 @@ fn test_override_floating_focus_handling() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -4794,6 +4878,7 @@ fn test_override_floating_position_and_size_update() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -4817,6 +4902,7 @@ fn test_override_floating_position_and_size_update() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -4907,6 +4993,7 @@ fn test_override_floating_return_value_has_panes() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
     ) = create_layout_applier_fixtures(size);
 
@@ -4930,6 +5017,7 @@ fn test_override_floating_return_value_has_panes() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -5030,6 +5118,7 @@ fn test_override_floating_return_value_no_panes() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         pty_receiver,
         plugin_receiver,
@@ -5055,6 +5144,7 @@ fn test_override_floating_return_value_no_panes() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -5171,6 +5261,7 @@ fn test_override_full_tiled_and_floating_together() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         pty_receiver,
         plugin_receiver,
@@ -5196,6 +5287,7 @@ fn test_override_full_tiled_and_floating_together() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -5317,6 +5409,7 @@ fn test_override_viewport_adjustment_with_borderless() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         pty_receiver,
         plugin_receiver,
@@ -5342,6 +5435,7 @@ fn test_override_viewport_adjustment_with_borderless() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -5441,6 +5535,7 @@ fn test_override_tiled_retain_terminal_panes_partial_match() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         pty_receiver,
         plugin_receiver,
@@ -5466,6 +5561,7 @@ fn test_override_tiled_retain_terminal_panes_partial_match() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -5574,6 +5670,7 @@ fn test_override_tiled_retain_terminal_panes_no_matches() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         pty_receiver,
         plugin_receiver,
@@ -5599,6 +5696,7 @@ fn test_override_tiled_retain_terminal_panes_no_matches() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -5722,6 +5820,7 @@ fn test_override_floating_retain_terminal_panes_partial_match() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         pty_receiver,
         plugin_receiver,
@@ -5747,6 +5846,7 @@ fn test_override_floating_retain_terminal_panes_partial_match() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -5880,6 +5980,7 @@ fn test_override_floating_retain_terminal_panes_no_matches() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         pty_receiver,
         plugin_receiver,
@@ -5905,6 +6006,7 @@ fn test_override_floating_retain_terminal_panes_no_matches() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -6044,6 +6146,7 @@ fn test_override_mixed_retain_terminal_panes_both_tiled_and_floating() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         pty_receiver,
         plugin_receiver,
@@ -6069,6 +6172,7 @@ fn test_override_mixed_retain_terminal_panes_both_tiled_and_floating() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -6205,6 +6309,7 @@ fn test_override_retain_terminal_but_close_plugin_panes() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         pty_receiver,
         plugin_receiver,
@@ -6230,6 +6335,7 @@ fn test_override_retain_terminal_but_close_plugin_panes() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -6363,6 +6469,7 @@ fn test_override_tiled_retain_plugin_panes_partial_match() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         pty_receiver,
         plugin_receiver,
@@ -6388,6 +6495,7 @@ fn test_override_tiled_retain_plugin_panes_partial_match() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -6502,6 +6610,7 @@ fn test_override_tiled_retain_plugin_panes_no_matches() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         _pty_receiver,
         plugin_receiver,
@@ -6527,6 +6636,7 @@ fn test_override_tiled_retain_plugin_panes_no_matches() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -6656,6 +6766,7 @@ fn test_override_floating_retain_plugin_panes_partial_match() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         pty_receiver,
         plugin_receiver,
@@ -6681,6 +6792,7 @@ fn test_override_floating_retain_plugin_panes_partial_match() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -6805,6 +6917,7 @@ fn test_override_floating_retain_plugin_panes_no_matches() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         _pty_receiver,
         plugin_receiver,
@@ -6830,6 +6943,7 @@ fn test_override_floating_retain_plugin_panes_no_matches() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -6962,6 +7076,7 @@ fn test_override_mixed_retain_plugin_panes_both_tiled_and_floating() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         pty_receiver,
         plugin_receiver,
@@ -6987,6 +7102,7 @@ fn test_override_mixed_retain_plugin_panes_both_tiled_and_floating() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );
@@ -7119,6 +7235,7 @@ fn test_override_retain_plugin_but_close_terminal_panes() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         pty_receiver,
         plugin_receiver,
@@ -7144,6 +7261,7 @@ fn test_override_retain_plugin_but_close_terminal_panes() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     );

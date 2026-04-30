@@ -104,6 +104,7 @@ pub(crate) struct PluginPane {
     debug: bool,
     arrow_fonts: bool,
     styled_underlines: bool,
+    session_name_in_terminal_title: bool,
     should_be_suppressed: bool,
     text_being_pasted: Option<Vec<u8>>,
     supports_mouse_selection: bool,
@@ -127,6 +128,7 @@ impl PluginPane {
         debug: bool,
         arrow_fonts: bool,
         styled_underlines: bool,
+        session_name_in_terminal_title: bool,
     ) -> Self {
         let loading_indication = LoadingIndication::new(title.clone()).with_colors(style.colors);
         let initial_loading_message = loading_indication.to_string();
@@ -161,6 +163,7 @@ impl PluginPane {
             debug,
             arrow_fonts,
             styled_underlines,
+            session_name_in_terminal_title,
             should_be_suppressed: false,
             text_being_pasted: None,
             supports_mouse_selection: false,
@@ -504,7 +507,7 @@ impl Pane for PluginPane {
         } else {
             &self.pane_name
         };
-        make_terminal_title(pane_title)
+        make_terminal_title(pane_title, self.session_name_in_terminal_title)
     }
     fn update_name(&mut self, name: &str) {
         match name {

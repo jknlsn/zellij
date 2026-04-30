@@ -6001,6 +6001,7 @@ Config {
         copy_clipboard: None,
         copy_on_select: None,
         osc8_hyperlinks: None,
+        session_name_in_terminal_title: None,
         scrollback_editor: None,
         session_name: None,
         attach_to_session: None,

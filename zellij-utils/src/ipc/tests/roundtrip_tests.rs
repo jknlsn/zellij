@@ -454,6 +454,7 @@ fn test_client_messages() {
                 copy_clipboard: Some(Clipboard::System),
                 copy_on_select: Some(true),
                 osc8_hyperlinks: Some(true),
+                session_name_in_terminal_title: Some(false),
                 scrollback_editor: Some(PathBuf::from("scrollback_editor")),
                 session_name: Some("session_name".to_owned()),
                 attach_to_session: Some(true),

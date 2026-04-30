@@ -719,6 +719,7 @@ impl From<crate::input::options::Options>
             }),
             copy_on_select: options.copy_on_select,
             osc8_hyperlinks: options.osc8_hyperlinks,
+            session_name_in_terminal_title: options.session_name_in_terminal_title,
             scrollback_editor: options
                 .scrollback_editor
                 .map(|p| p.to_string_lossy().to_string()),
@@ -834,6 +835,7 @@ impl TryFrom<crate::client_server_contract::client_server_contract::Options>
                 .transpose()?,
             copy_on_select: options.copy_on_select,
             osc8_hyperlinks: options.osc8_hyperlinks,
+            session_name_in_terminal_title: options.session_name_in_terminal_title,
             scrollback_editor: options.scrollback_editor.map(std::path::PathBuf::from),
             session_name: options.session_name,
             attach_to_session: options.attach_to_session,

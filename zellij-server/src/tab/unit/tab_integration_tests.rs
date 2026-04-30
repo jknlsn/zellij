@@ -266,6 +266,7 @@ fn create_new_tab(size: Size, default_mode: ModeInfo) -> Tab {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        true,
         explicitly_disable_kitty_keyboard_protocol,
         None,
         false,
@@ -354,6 +355,7 @@ fn create_new_tab_without_pane_frames(size: Size, default_mode: ModeInfo) -> Tab
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        true,
         explicitly_disable_kitty_keyboard_protocol,
         None,
         false,
@@ -461,6 +463,7 @@ fn create_new_tab_with_swap_layouts(
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        true,
         explicitly_disable_kitty_keyboard_protocol,
         None,
         false,
@@ -565,6 +568,7 @@ fn create_new_tab_with_os_api(
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        true,
         explicitly_disable_kitty_keyboard_protocol,
         None,
         false,
@@ -655,6 +659,7 @@ fn create_new_tab_with_layout(size: Size, default_mode: ModeInfo, layout: &str) 
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        true,
         explicitly_disable_kitty_keyboard_protocol,
         None,
         false,
@@ -759,6 +764,7 @@ fn create_new_tab_with_mock_pty_writer(
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        true,
         explicitly_disable_kitty_keyboard_protocol,
         None,
         false,
@@ -854,6 +860,7 @@ fn create_new_tab_with_sixel_support(
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        true,
         explicitly_disable_kitty_keyboard_protocol,
         None,
         false,
@@ -12747,6 +12754,7 @@ fn create_new_tab_with_plugin_receiver(
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        true,
         explicitly_disable_kitty_keyboard_protocol,
         None,
         false,
@@ -14532,6 +14540,7 @@ fn create_new_tab_with_server_receiver(
         true,  // arrow_fonts
         true,  // styled_underlines
         true,  // osc8_hyperlinks
+        true,  // session_name_in_terminal_title
         false, // explicitly_disable_kitty_keyboard_protocol
         None,
         false,

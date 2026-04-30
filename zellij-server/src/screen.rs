@@ -1441,6 +1441,7 @@ pub(crate) struct Screen {
     default_shell: PathBuf,
     styled_underlines: bool,
     osc8_hyperlinks: bool,
+    session_name_in_terminal_title: bool,
     arrow_fonts: bool,
     #[cfg_attr(test, allow(dead_code))]
     layout_dir: Option<PathBuf>,
@@ -1545,6 +1546,7 @@ impl Screen {
         scrollback_lines_to_serialize: Option<usize>,
         styled_underlines: bool,
         osc8_hyperlinks: bool,
+        session_name_in_terminal_title: bool,
         arrow_fonts: bool,
         layout_dir: Option<PathBuf>,
         explicitly_disable_kitty_keyboard_protocol: bool,
@@ -1602,6 +1604,7 @@ impl Screen {
             scrollback_lines_to_serialize,
             styled_underlines,
             osc8_hyperlinks,
+            session_name_in_terminal_title,
             arrow_fonts,
             resurrectable_sessions_cache,
             layout_dir,
@@ -3329,6 +3332,7 @@ impl Screen {
             self.arrow_fonts,
             self.styled_underlines,
             self.osc8_hyperlinks,
+            self.session_name_in_terminal_title,
             self.explicitly_disable_kitty_keyboard_protocol,
             self.default_editor.clone(),
             self.web_clients_allowed,
@@ -6183,6 +6187,8 @@ pub(crate) fn screen_thread_main(
     let web_server_port = config_options.web_server_port.unwrap_or(8082);
     let styled_underlines = config_options.styled_underlines.unwrap_or(true);
     let osc8_hyperlinks = config_options.osc8_hyperlinks.unwrap_or(true);
+    let session_name_in_terminal_title =
+        config_options.session_name_in_terminal_title.unwrap_or(true);
     let explicitly_disable_kitty_keyboard_protocol = config_options
         .support_kitty_keyboard_protocol
         .map(|e| !e) // this is due to the config options wording, if
@@ -6230,6 +6236,7 @@ pub(crate) fn screen_thread_main(
         scrollback_lines_to_serialize,
         styled_underlines,
         osc8_hyperlinks,
+        session_name_in_terminal_title,
         arrow_fonts,
         layout_dir,
         explicitly_disable_kitty_keyboard_protocol,

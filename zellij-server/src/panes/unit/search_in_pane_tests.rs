@@ -50,6 +50,7 @@ fn create_pane() -> TerminalPane {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        true,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     ); // 0 is the pane index

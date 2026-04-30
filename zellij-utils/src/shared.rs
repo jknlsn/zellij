@@ -67,18 +67,21 @@ pub fn adjust_to_size(s: &str, rows: usize, columns: usize) -> String {
         .join("\n\r")
 }
 
-pub fn make_terminal_title(pane_title: &str) -> String {
-    format!(
-        "\u{1b}]0;{}{}\u{07}",
+pub fn make_terminal_title(pane_title: &str, include_session_name: bool) -> String {
+    let session_prefix = if include_session_name {
         get_session_name()
-            .map(|n| if pane_title.is_empty() {
-                format!("{}", n)
-            } else {
-                format!("{} | ", n)
+            .map(|n| {
+                if pane_title.is_empty() {
+                    format!("{}", n)
+                } else {
+                    format!("{} | ", n)
+                }
             })
-            .unwrap_or_default(),
-        pane_title
-    )
+            .unwrap_or_default()
+    } else {
+        String::new()
+    };
+    format!("\u{1b}]0;{}{}\u{07}", session_prefix, pane_title)
 }
 
 // Colors
@@ -225,4 +228,39 @@ pub fn parse_base_url(url: &str) -> Result<ServerAddress> {
         .ok_or_else(|| anyhow!("No port in URL"))?;
 
     Ok(ServerAddress { ip, port })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn make_terminal_title_with_and_without_session_prefix() {
+        // Set session name so the true path is distinguishable from false
+        let old_session = std::env::var("ZELLIJ_SESSION_NAME").ok();
+        std::env::set_var("ZELLIJ_SESSION_NAME", "test-session");
+
+        // include_session_name = false omits the prefix
+        assert_eq!(
+            make_terminal_title("my pane", false),
+            "\u{1b}]0;my pane\u{07}"
+        );
+        assert_eq!(make_terminal_title("", false), "\u{1b}]0;\u{07}");
+
+        // include_session_name = true includes the prefix
+        assert_eq!(
+            make_terminal_title("my pane", true),
+            "\u{1b}]0;test-session | my pane\u{07}"
+        );
+        assert_eq!(
+            make_terminal_title("", true),
+            "\u{1b}]0;test-session\u{07}"
+        );
+
+        // Restore
+        match old_session {
+            Some(v) => std::env::set_var("ZELLIJ_SESSION_NAME", v),
+            None => std::env::remove_var("ZELLIJ_SESSION_NAME"),
+        }
+    }
 }

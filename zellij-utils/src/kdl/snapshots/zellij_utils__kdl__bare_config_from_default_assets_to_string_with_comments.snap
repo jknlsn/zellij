@@ -299,6 +299,13 @@ web_client {
 // 
 // osc8_hyperlinks true
  
+// Whether to prefix the host terminal title with the Zellij session name
+// Options:
+//   - true (Default)
+//   - false
+// 
+// session_name_in_terminal_title true
+ 
 // Choose the theme that is specified in the themes section.
 // Default: default
 // 

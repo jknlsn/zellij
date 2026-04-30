@@ -152,6 +152,7 @@ pub struct TerminalPane {
     invoked_with: Option<Run>,
     #[allow(dead_code)]
     arrow_fonts: bool,
+    session_name_in_terminal_title: bool,
     notification_end: Option<NotificationEnd>,
     /// `true` while a host-terminal forward initiated by this pane is
     /// outstanding. While set, processing of `pending_pty_input` is
@@ -517,7 +518,7 @@ impl Pane for TerminalPane {
         } else {
             &self.pane_name
         };
-        make_terminal_title(pane_title)
+        make_terminal_title(pane_title, self.session_name_in_terminal_title)
     }
     fn update_name(&mut self, name: &str) {
         match name {
@@ -1097,6 +1098,7 @@ impl TerminalPane {
         arrow_fonts: bool,
         styled_underlines: bool,
         osc8_hyperlinks: bool,
+        session_name_in_terminal_title: bool,
         explicitly_disable_keyboard_protocol: bool,
         mut notification_end: Option<NotificationEnd>,
     ) -> TerminalPane {
@@ -1145,6 +1147,7 @@ impl TerminalPane {
             has_bell_notification: false,
             invoked_with,
             arrow_fonts,
+            session_name_in_terminal_title,
             notification_end,
             forward_paused: false,
             pending_pty_input: VecDeque::new(),

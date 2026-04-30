@@ -2762,6 +2762,11 @@ impl Options {
         let osc8_hyperlinks =
             kdl_property_first_arg_as_bool_or_error!(kdl_options, "osc8_hyperlinks")
                 .map(|(v, _)| v);
+        let session_name_in_terminal_title = kdl_property_first_arg_as_bool_or_error!(
+            kdl_options,
+            "session_name_in_terminal_title"
+        )
+        .map(|(v, _)| v);
         let scrollback_editor =
             kdl_property_first_arg_as_string_or_error!(kdl_options, "scrollback_editor")
                 .map(|(string, _entry)| PathBuf::from(string));
@@ -2924,6 +2929,7 @@ impl Options {
             copy_clipboard,
             copy_on_select,
             osc8_hyperlinks,
+            session_name_in_terminal_title,
             scrollback_editor,
             session_name,
             attach_to_session,
@@ -3009,6 +3015,36 @@ impl Options {
         };
         if let Some(osc8_hyperlinks) = self.osc8_hyperlinks {
             let mut node = create_node(osc8_hyperlinks);
+            if add_comments {
+                node.set_leading(format!("{}\n", comment_text));
+            }
+            Some(node)
+        } else if add_comments {
+            let mut node = create_node(true);
+            node.set_leading(format!("{}\n// ", comment_text));
+            Some(node)
+        } else {
+            None
+        }
+    }
+    fn session_name_in_terminal_title_to_kdl(&self, add_comments: bool) -> Option<KdlNode> {
+        let comment_text = format!(
+            "{}\n{}\n{}\n{}\n{}\n{}",
+            " ",
+            "// Whether to prefix the host terminal title with the Zellij session name",
+            "// Options:",
+            "//   - true (Default)",
+            "//   - false",
+            "// ",
+        );
+
+        let create_node = |node_value: bool| -> KdlNode {
+            let mut node = KdlNode::new("session_name_in_terminal_title");
+            node.push(KdlValue::Bool(node_value));
+            node
+        };
+        if let Some(session_name_in_terminal_title) = self.session_name_in_terminal_title {
+            let mut node = create_node(session_name_in_terminal_title);
             if add_comments {
                 node.set_leading(format!("{}\n", comment_text));
             }
@@ -4459,6 +4495,11 @@ impl Options {
         }
         if let Some(osc8_hyperlinks_node) = self.osc8_hyperlinks_to_kdl(add_comments) {
             nodes.push(osc8_hyperlinks_node);
+        }
+        if let Some(session_name_in_terminal_title_node) =
+            self.session_name_in_terminal_title_to_kdl(add_comments)
+        {
+            nodes.push(session_name_in_terminal_title_node);
         }
         if let Some(theme_node) = self.theme_to_kdl(add_comments) {
             nodes.push(theme_node);

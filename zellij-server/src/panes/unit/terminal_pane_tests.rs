@@ -58,6 +58,7 @@ pub fn scrolling_inside_a_pane() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        true,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     ); // 0 is the pane index
@@ -111,6 +112,7 @@ pub fn sixel_image_inside_terminal_pane() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        true,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     ); // 0 is the pane index
@@ -164,6 +166,7 @@ pub fn partial_sixel_image_inside_terminal_pane() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        true,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     ); // 0 is the pane index
@@ -211,6 +214,7 @@ pub fn overflowing_sixel_image_inside_terminal_pane() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        true,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     ); // 0 is the pane index
@@ -257,6 +261,7 @@ pub fn scrolling_through_a_sixel_image() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        true,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     ); // 0 is the pane index
@@ -314,6 +319,7 @@ pub fn multiple_sixel_images_in_pane() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        true,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     ); // 0 is the pane index
@@ -369,6 +375,7 @@ pub fn resizing_pane_with_sixel_images() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        true,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     ); // 0 is the pane index
@@ -427,6 +434,7 @@ pub fn changing_character_cell_size_with_sixel_images() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        true,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     ); // 0 is the pane index
@@ -490,6 +498,7 @@ pub fn keep_working_after_corrupted_sixel_image() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        true,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     ); // 0 is the pane index
@@ -551,6 +560,7 @@ pub fn pane_with_frame_position_is_on_frame() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        true,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     ); // 0 is the pane index
@@ -648,6 +658,7 @@ pub fn pane_with_bottom_and_right_borders_position_is_on_frame() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        true,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     ); // 0 is the pane index
@@ -725,6 +736,7 @@ fn make_terminal_pane_for_bell() -> TerminalPane {
         None,
         None,
         false,
+        true,
         true,
         true,
         true,
@@ -818,6 +830,7 @@ pub fn frameless_pane_position_is_on_frame() {
         arrow_fonts,
         styled_underlines,
         osc8_hyperlinks,
+        true,
         explicitly_disable_kitty_keyboard_protocol,
         None,
     ); // 0 is the pane index

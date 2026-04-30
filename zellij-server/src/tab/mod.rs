@@ -208,6 +208,7 @@ pub(crate) struct Tab {
     arrow_fonts: bool,
     styled_underlines: bool,
     osc8_hyperlinks: bool,
+    session_name_in_terminal_title: bool,
     explicitly_disable_kitty_keyboard_protocol: bool,
     web_clients_allowed: bool,
     web_sharing: WebSharing,
@@ -765,6 +766,7 @@ impl Tab {
         arrow_fonts: bool,
         styled_underlines: bool,
         osc8_hyperlinks: bool,
+        session_name_in_terminal_title: bool,
         explicitly_disable_kitty_keyboard_protocol: bool,
         default_editor: Option<PathBuf>,
         web_clients_allowed: bool,
@@ -881,6 +883,7 @@ impl Tab {
             arrow_fonts,
             styled_underlines,
             osc8_hyperlinks,
+            session_name_in_terminal_title,
             explicitly_disable_kitty_keyboard_protocol,
             default_editor,
             web_clients_allowed,
@@ -940,6 +943,7 @@ impl Tab {
             self.arrow_fonts,
             self.styled_underlines,
             self.osc8_hyperlinks,
+            self.session_name_in_terminal_title,
             self.explicitly_disable_kitty_keyboard_protocol,
             blocking_terminal,
         )
@@ -1018,6 +1022,7 @@ impl Tab {
             self.arrow_fonts,
             self.styled_underlines,
             self.osc8_hyperlinks,
+            self.session_name_in_terminal_title,
             self.explicitly_disable_kitty_keyboard_protocol,
             blocking_terminal,
         )
@@ -1111,6 +1116,7 @@ impl Tab {
                 self.arrow_fonts,
                 self.styled_underlines,
                 self.osc8_hyperlinks,
+                self.session_name_in_terminal_title,
                 self.explicitly_disable_kitty_keyboard_protocol,
                 None,
             )
@@ -1151,6 +1157,7 @@ impl Tab {
                 self.arrow_fonts,
                 self.styled_underlines,
                 self.osc8_hyperlinks,
+                self.session_name_in_terminal_title,
                 self.explicitly_disable_kitty_keyboard_protocol,
                 None,
             )
@@ -1771,6 +1778,7 @@ impl Tab {
                     self.arrow_fonts,
                     self.styled_underlines,
                     self.osc8_hyperlinks,
+                    self.session_name_in_terminal_title,
                     self.explicitly_disable_kitty_keyboard_protocol,
                     blocking_notification,
                 )) as Box<dyn Pane>
@@ -1801,6 +1809,7 @@ impl Tab {
                     self.debug,
                     self.arrow_fonts,
                     self.styled_underlines,
+                    self.session_name_in_terminal_title,
                 )) as Box<dyn Pane>
             },
         };
@@ -1884,6 +1893,7 @@ impl Tab {
                     self.arrow_fonts,
                     self.styled_underlines,
                     self.osc8_hyperlinks,
+                    self.session_name_in_terminal_title,
                     self.explicitly_disable_kitty_keyboard_protocol,
                     blocking_notification,
                 )) as Box<dyn Pane>
@@ -1914,6 +1924,7 @@ impl Tab {
                     self.debug,
                     self.arrow_fonts,
                     self.styled_underlines,
+                    self.session_name_in_terminal_title,
                 )) as Box<dyn Pane>
             },
         };
@@ -1986,6 +1997,7 @@ impl Tab {
                     self.arrow_fonts,
                     self.styled_underlines,
                     self.osc8_hyperlinks,
+                    self.session_name_in_terminal_title,
                     self.explicitly_disable_kitty_keyboard_protocol,
                     blocking_notification,
                 )) as Box<dyn Pane>
@@ -2016,6 +2028,7 @@ impl Tab {
                     self.debug,
                     self.arrow_fonts,
                     self.styled_underlines,
+                    self.session_name_in_terminal_title,
                 )) as Box<dyn Pane>
             },
         };
@@ -2138,6 +2151,7 @@ impl Tab {
                     self.arrow_fonts,
                     self.styled_underlines,
                     self.osc8_hyperlinks,
+                    self.session_name_in_terminal_title,
                     self.explicitly_disable_kitty_keyboard_protocol,
                     blocking_notification,
                 )) as Box<dyn Pane>
@@ -2168,6 +2182,7 @@ impl Tab {
                     self.debug,
                     self.arrow_fonts,
                     self.styled_underlines,
+                    self.session_name_in_terminal_title,
                 )) as Box<dyn Pane>
             },
         };
@@ -2353,6 +2368,7 @@ impl Tab {
                     self.arrow_fonts,
                     self.styled_underlines,
                     self.osc8_hyperlinks,
+                    self.session_name_in_terminal_title,
                     self.explicitly_disable_kitty_keyboard_protocol,
                     completion_tx,
                 );
@@ -2425,6 +2441,7 @@ impl Tab {
                     self.debug,
                     self.arrow_fonts,
                     self.styled_underlines,
+                    self.session_name_in_terminal_title,
                 );
                 if let Some(borderless) = borderless {
                     new_pane.set_borderless(borderless);
@@ -2557,6 +2574,7 @@ impl Tab {
                     self.arrow_fonts,
                     self.styled_underlines,
                     self.osc8_hyperlinks,
+                    self.session_name_in_terminal_title,
                     self.explicitly_disable_kitty_keyboard_protocol,
                     completion_tx,
                 );
@@ -2624,6 +2642,7 @@ impl Tab {
                     self.arrow_fonts,
                     self.styled_underlines,
                     self.osc8_hyperlinks,
+                    self.session_name_in_terminal_title,
                     self.explicitly_disable_kitty_keyboard_protocol,
                     completion_tx,
                 );
@@ -6231,6 +6250,7 @@ impl Tab {
             self.arrow_fonts,
             self.styled_underlines,
             self.osc8_hyperlinks,
+            self.session_name_in_terminal_title,
             self.explicitly_disable_kitty_keyboard_protocol,
             None,
         );

@@ -527,6 +527,12 @@ load_plugins {
 //
 // osc8_hyperlinks false
 
+// Whether to prefix the host terminal title with the Zellij session name
+// (Requires pane recreation to take effect for existing panes)
+// Default: true
+//
+// session_name_in_terminal_title false
+
 // A command to run (will be wrapped with sh -c and provided the RESURRECT_COMMAND env variable)
 // after Zellij attempts to discover a command inside a pane when resurrecting sessions, the STDOUT
 // of this command will be used instead of the discovered RESURRECT_COMMAND

@@ -182,6 +182,7 @@ fn read_from_channel(
                     arrow_fonts,
                     styled_underlines,
                     true, // osc8_hyperlinks
+                    true,
                     explicitly_disable_kitty_keyboard_protocol,
                     None,
                 ); // 0 is the pane index
