@@ -39,7 +39,10 @@ use std::rc::Rc;
 
 use interprocess::local_socket::Stream as LocalSocketStream;
 use zellij_utils::{
-    data::{Event, FloatingPaneCoordinates, InputMode, ModeInfo, Mouse, NewPanePlacement, Palette, Style},
+    data::{
+        Event, FloatingPaneCoordinates, InputMode, ModeInfo, Mouse, NewPanePlacement, Palette,
+        Style,
+    },
     input::command::{RunCommand, TerminalAction},
     ipc::{ClientToServerMsg, ServerToClientMsg},
 };
@@ -13605,8 +13608,6 @@ fn right_click_on_plugin_pane_is_delivered_to_plugin_even_when_not_focused() {
         create_new_tab_with_plugin_receiver(size, ModeInfo::default());
     let plugin_pane_id = PaneId::Plugin(2);
 
-    // Sidebar/statusbar plugins are never the active pane: create the plugin
-    // pane without focusing it and leave the terminal pane active.
     tab.new_pane(
         plugin_pane_id,
         None,
@@ -13623,24 +13624,18 @@ fn right_click_on_plugin_pane_is_delivered_to_plugin_even_when_not_focused() {
     let right_click = MouseEvent::new_right_press_event(click_position);
     tab.handle_mouse_event(&right_click, client_id).unwrap();
 
-    // The plugin pane receives the right-click even though it is not the
-    // active pane.
-    let mut found_right_click = false;
-    while let Ok((instruction, _ctx)) = mock_plugin_receiver.try_recv() {
-        if let PluginInstruction::Update(events) = instruction {
-            for (plugin_id, _client, event) in events {
-                if plugin_id == Some(2)
-                    && matches!(event, Event::Mouse(Mouse::RightClick(..)))
-                {
-                    found_right_click = true;
-                }
-            }
-        }
-    }
-    assert!(
-        found_right_click,
-        "Expected right-click to be delivered to the plugin pane"
-    );
+    assert_eq!(tab.get_active_pane_id(client_id), Some(PaneId::Terminal(1)));
+    assert!(mock_plugin_receiver.try_iter().any(|(instruction, _)| {
+        matches!(
+            instruction,
+            PluginInstruction::Update(events)
+                if events.contains(&(
+                    Some(2),
+                    Some(client_id),
+                    Event::Mouse(Mouse::RightClick(0, 8)),
+                ))
+        )
+    }));
 }
 
 #[test]

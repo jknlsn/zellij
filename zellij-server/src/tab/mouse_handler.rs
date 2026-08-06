@@ -181,10 +181,7 @@ enum MouseAction {
         pane_id: PaneId,
         event: MouseEvent,
     },
-    RightClick {
-        pane_id: PaneId,
-        position: Position,
-    },
+    RightClick(PaneId),
     FrameIntercepted {
         pane_id: PaneId,
     },
@@ -873,11 +870,11 @@ impl MouseHandler {
             MouseAction::SendToTerminal { pane_id, event } => {
                 Self::execute_send_to_terminal(tab, pane_id, event, client_id)
             },
-            MouseAction::RightClick { pane_id, position } => {
+            MouseAction::RightClick(pane_id) => {
                 let pane = tab
                     .get_pane_with_id_mut(pane_id)
                     .ok_or_else(|| anyhow!("Failed to find pane {pane_id:?}"))?;
-                let relative_position = pane.relative_position(&position);
+                let relative_position = pane.relative_position(&event.position);
                 pane.handle_right_click(&relative_position, client_id);
                 Ok(MouseEffect::default())
             },
@@ -1500,39 +1497,24 @@ impl MouseHandler {
             }
         }
 
-        let is_right_press = event.right && event.event_type == MouseEventType::Press;
-        if is_right_press {
-            let Some(details) = &ctx.clicked_pane else {
-                return Ok(MouseAction::NoAction);
-            };
-
-            if details.on_frame {
-                if details.frame_intercepted {
-                    return Ok(MouseAction::FrameIntercepted {
-                        pane_id: details.pane_id,
-                    });
-                }
-
-                // A right press on a frame is deliberately inert: move and
-                // resize are left-button drag gestures, and their in-progress
-                // states only accept left-button motion/release — entering
-                // them from a right press would leave the pane stuck mid-drag.
-                return Ok(MouseAction::NoAction);
-            }
-
-            // Plugin panes get right-clicks regardless of focus: statusbar and
-            // sidebar plugins (zjstatus, zjherder) are never the active pane,
-            // so gating on the active pane would make right-clicks unreachable
-            // for them. Terminal panes keep the existing active-only passthrough.
-            if matches!(details.pane_id, PaneId::Plugin(_)) {
-                return Ok(MouseAction::RightClick {
-                    pane_id: details.pane_id,
-                    position: event.position,
-                });
-            }
-        }
-
         if event.right {
+            if event.event_type == MouseEventType::Press {
+                let Some(details) = &ctx.clicked_pane else {
+                    return Ok(MouseAction::NoAction);
+                };
+                if details.on_frame {
+                    if details.frame_intercepted {
+                        return Ok(MouseAction::FrameIntercepted {
+                            pane_id: details.pane_id,
+                        });
+                    }
+                    return Ok(MouseAction::NoAction);
+                }
+                // Plugin panes may never be the active pane (statusbars, sidebars).
+                if matches!(details.pane_id, PaneId::Plugin(_)) {
+                    return Ok(MouseAction::RightClick(details.pane_id));
+                }
+            }
             let Some(pane_id) = ctx.pane_id_at_position else {
                 return Ok(MouseAction::NoAction);
             };
