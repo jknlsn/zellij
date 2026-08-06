@@ -39,7 +39,7 @@ use std::rc::Rc;
 
 use interprocess::local_socket::Stream as LocalSocketStream;
 use zellij_utils::{
-    data::{FloatingPaneCoordinates, InputMode, ModeInfo, NewPanePlacement, Palette, Style},
+    data::{Event, FloatingPaneCoordinates, InputMode, ModeInfo, Mouse, NewPanePlacement, Palette, Style},
     input::command::{RunCommand, TerminalAction},
     ipc::{ClientToServerMsg, ServerToClientMsg},
 };
@@ -13591,6 +13591,55 @@ fn click_on_plugin_highlight_sends_highlight_clicked() {
     assert!(
         found_highlight_clicked,
         "Expected HighlightClicked instruction to be sent"
+    );
+}
+
+#[test]
+fn right_click_on_plugin_pane_is_delivered_to_plugin_even_when_not_focused() {
+    let size = Size {
+        cols: 121,
+        rows: 20,
+    };
+    let client_id = 1;
+    let (mut tab, mock_plugin_receiver) =
+        create_new_tab_with_plugin_receiver(size, ModeInfo::default());
+    let plugin_pane_id = PaneId::Plugin(2);
+
+    // Sidebar/statusbar plugins are never the active pane: create the plugin
+    // pane without focusing it and leave the terminal pane active.
+    tab.new_pane(
+        plugin_pane_id,
+        None,
+        None,
+        false,
+        false,
+        NewPanePlacement::default(),
+        Some(client_id),
+        None,
+    )
+    .unwrap();
+
+    let click_position = Position::new(1, 70);
+    let right_click = MouseEvent::new_right_press_event(click_position);
+    tab.handle_mouse_event(&right_click, client_id).unwrap();
+
+    // The plugin pane receives the right-click even though it is not the
+    // active pane.
+    let mut found_right_click = false;
+    while let Ok((instruction, _ctx)) = mock_plugin_receiver.try_recv() {
+        if let PluginInstruction::Update(events) = instruction {
+            for (plugin_id, _client, event) in events {
+                if plugin_id == Some(2)
+                    && matches!(event, Event::Mouse(Mouse::RightClick(..)))
+                {
+                    found_right_click = true;
+                }
+            }
+        }
+    }
+    assert!(
+        found_right_click,
+        "Expected right-click to be delivered to the plugin pane"
     );
 }
 
