@@ -765,6 +765,7 @@ impl Action {
                 let mut node = KdlNode::new("SetPaneFrameStyle");
                 let style = match style {
                     PaneFrameStyle::Full => "full",
+                    PaneFrameStyle::Borders => "borders",
                     PaneFrameStyle::Titles => "titles",
                     PaneFrameStyle::None => "none",
                 };
@@ -3414,11 +3415,12 @@ impl Options {
     }
     fn pane_frame_style_to_kdl(&self, add_comments: bool) -> Option<KdlNode> {
         let comment_text = format!(
-            "{}\n{}\n{}\n{}\n{}\n{}",
+            "{}\n{}\n{}\n{}\n{}\n{}\n{}",
             " ",
             "// Set the pane frame style when pane_frames is enabled",
             "// Options:",
             "//   - full",
+            "//   - borders",
             "//   - titles (default)",
             "// ",
         );
@@ -3426,6 +3428,7 @@ impl Options {
         let style_as_str = |style: &PaneFrameStyle| -> &'static str {
             match style {
                 PaneFrameStyle::Full => "full",
+                PaneFrameStyle::Borders => "borders",
                 PaneFrameStyle::Titles => "titles",
                 PaneFrameStyle::None => "none",
             }
@@ -7915,4 +7918,27 @@ fn osc8_hyperlinks_config_parsing() {
     let serialized = config.to_string(false);
     let deserialized = Config::from_kdl(&serialized, None).unwrap();
     assert_eq!(deserialized.options.osc8_hyperlinks, Some(true));
+}
+
+#[test]
+fn pane_frame_style_borders_config_parsing() {
+    let config = Config::from_kdl(
+        r#"
+        pane_frame_style "borders"
+    "#,
+        None,
+    )
+    .unwrap();
+    assert_eq!(
+        config.options.pane_frame_style,
+        Some(PaneFrameStyle::Borders)
+    );
+
+    // Test serialization roundtrip
+    let serialized = config.to_string(false);
+    let deserialized = Config::from_kdl(&serialized, None).unwrap();
+    assert_eq!(
+        deserialized.options.pane_frame_style,
+        Some(PaneFrameStyle::Borders)
+    );
 }

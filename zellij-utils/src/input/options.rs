@@ -71,6 +71,7 @@ impl FromStr for OnForceClose {
 #[serde(rename_all = "lowercase")]
 pub enum PaneFrameStyle {
     Full,
+    Borders,
     Titles,
     None,
 }
@@ -83,21 +84,26 @@ impl Default for PaneFrameStyle {
 
 impl PaneFrameStyle {
     pub fn draws_full_frames(&self) -> bool {
-        matches!(self, PaneFrameStyle::Full)
+        matches!(self, PaneFrameStyle::Full | PaneFrameStyle::Borders)
     }
 
     pub fn draws_titles(&self) -> bool {
         matches!(self, PaneFrameStyle::Titles)
     }
 
+    /// Whether titles and decorations are drawn in/next to pane frames
+    pub fn draws_frame_titles(&self) -> bool {
+        matches!(
+            self,
+            PaneFrameStyle::Full | PaneFrameStyle::Titles | PaneFrameStyle::None
+        )
+    }
+
     pub fn from_options(options: &Options) -> Self {
         if options.pane_frames == Some(false) {
             return PaneFrameStyle::None;
         }
-        match options.pane_frame_style {
-            Some(PaneFrameStyle::Full) => PaneFrameStyle::Full,
-            _ => PaneFrameStyle::Titles,
-        }
+        options.pane_frame_style.unwrap_or_default()
     }
 }
 
@@ -106,10 +112,11 @@ impl FromStr for PaneFrameStyle {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s.trim().to_lowercase().as_str() {
             "full" => Ok(PaneFrameStyle::Full),
+            "borders" => Ok(PaneFrameStyle::Borders),
             "titles" => Ok(PaneFrameStyle::Titles),
             "none" => Ok(PaneFrameStyle::None),
             e => Err(format!(
-                "Unknown pane frame style: '{}' (expected 'full', 'titles' or 'none')",
+                "Unknown pane frame style: '{}' (expected 'full', 'borders', 'titles' or 'none')",
                 e
             )
             .into()),
@@ -837,12 +844,20 @@ mod tests {
             PaneFrameStyle::Full
         );
         assert_eq!(
+            "borders".parse::<PaneFrameStyle>().unwrap(),
+            PaneFrameStyle::Borders
+        );
+        assert_eq!(
             "titles".parse::<PaneFrameStyle>().unwrap(),
             PaneFrameStyle::Titles
         );
         assert_eq!(
             "none".parse::<PaneFrameStyle>().unwrap(),
             PaneFrameStyle::None
+        );
+        assert_eq!(
+            "BORDERS".parse::<PaneFrameStyle>().unwrap(),
+            PaneFrameStyle::Borders
         );
         assert_eq!(
             "NONE".parse::<PaneFrameStyle>().unwrap(),
@@ -976,5 +991,27 @@ mod tests {
             Some(HostNotificationProtocol::Osc99),
             "the option is carried over verbatim, not toggled like the boolean options are"
         );
+    }
+
+    #[test]
+    fn pane_frame_style_from_options_preserves_all_variants() {
+        for style in [
+            PaneFrameStyle::Full,
+            PaneFrameStyle::Borders,
+            PaneFrameStyle::Titles,
+            PaneFrameStyle::None,
+        ] {
+            let options = Options {
+                pane_frame_style: Some(style),
+                ..Default::default()
+            };
+            assert_eq!(PaneFrameStyle::from_options(&options), style);
+        }
+        let options = Options {
+            pane_frames: Some(false),
+            pane_frame_style: Some(PaneFrameStyle::Full),
+            ..Default::default()
+        };
+        assert_eq!(PaneFrameStyle::from_options(&options), PaneFrameStyle::None);
     }
 }

@@ -580,6 +580,7 @@ impl FloatingPanes {
                 false,
                 false,
                 should_draw_pane_frames,
+                pane_frame_style.draws_frame_titles(),
                 mouse_hover_pane_id,
                 current_pane_group.clone(),
                 show_help_text,

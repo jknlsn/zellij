@@ -1672,6 +1672,7 @@ impl Tab {
                     false,
                     false,
                     should_draw_pane_frames,
+                    self.pane_frame_style.draws_frame_titles(),
                     &self.mouse_hover_pane_id,
                     current_pane_group.clone(),
                     false,

@@ -1253,6 +1253,7 @@ impl TiledPanes {
                     pane_is_stacked_under,
                     pane_is_stacked_over,
                     should_draw_pane_frames,
+                    self.pane_frame_style.draws_frame_titles(),
                     &mouse_hover_pane_id,
                     current_pane_group.clone(),
                     show_help_text,

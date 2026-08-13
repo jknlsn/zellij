@@ -9556,7 +9556,8 @@ pub(crate) fn screen_thread_main(
                                 // waiting for it
             ) => {
                 screen.pane_frame_style = match screen.pane_frame_style {
-                    PaneFrameStyle::Full => PaneFrameStyle::Titles,
+                    PaneFrameStyle::Full => PaneFrameStyle::Borders,
+                    PaneFrameStyle::Borders => PaneFrameStyle::Titles,
                     PaneFrameStyle::Titles => PaneFrameStyle::None,
                     PaneFrameStyle::None => PaneFrameStyle::Full,
                 };

@@ -3368,6 +3368,7 @@ mod tests {
             PaneFrameStyle::Full,
             PaneFrameStyle::Titles,
             PaneFrameStyle::None,
+            PaneFrameStyle::Borders,
         ] {
             let original = Action::SetPaneFrameStyle(style);
             let protobuf: ProtobufAction = original.clone().try_into().expect("encode");

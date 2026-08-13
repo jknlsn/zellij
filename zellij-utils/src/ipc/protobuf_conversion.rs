@@ -968,6 +968,7 @@ impl From<crate::input::options::Options>
                 .map(|p| p.as_str().to_owned()),
             pane_frame_style: options.pane_frame_style.map(|s| match s {
                 crate::input::options::PaneFrameStyle::Full => "full".to_owned(),
+                crate::input::options::PaneFrameStyle::Borders => "borders".to_owned(),
                 crate::input::options::PaneFrameStyle::Titles => "titles".to_owned(),
                 crate::input::options::PaneFrameStyle::None => "none".to_owned(),
             }),
@@ -1017,6 +1018,7 @@ impl TryFrom<crate::client_server_contract::client_server_contract::Options>
             pane_frames: options.pane_frames,
             pane_frame_style: options.pane_frame_style.as_deref().and_then(|s| match s {
                 "full" => Some(crate::input::options::PaneFrameStyle::Full),
+                "borders" => Some(crate::input::options::PaneFrameStyle::Borders),
                 "titles" => Some(crate::input::options::PaneFrameStyle::Titles),
                 "none" => Some(crate::input::options::PaneFrameStyle::None),
                 _ => None,
@@ -1452,6 +1454,7 @@ impl From<crate::input::actions::Action>
             crate::input::actions::Action::SetPaneFrameStyle(style) => {
                 let style = match style {
                     crate::input::options::PaneFrameStyle::Full => "full",
+                    crate::input::options::PaneFrameStyle::Borders => "borders",
                     crate::input::options::PaneFrameStyle::Titles => "titles",
                     crate::input::options::PaneFrameStyle::None => "none",
                 };

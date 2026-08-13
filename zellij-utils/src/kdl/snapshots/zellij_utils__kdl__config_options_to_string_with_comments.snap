@@ -1,5 +1,6 @@
 ---
 source: zellij-utils/src/kdl/mod.rs
+assertion_line: 7605
 expression: fake_document.to_string()
 ---
  
@@ -80,6 +81,7 @@ pane_frames false
 // Set the pane frame style when pane_frames is enabled
 // Options:
 //   - full
+//   - borders
 //   - titles (default)
 // 
 // pane_frame_style "titles"

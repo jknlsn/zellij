@@ -1202,6 +1202,7 @@ pub enum PaneFrameStyle {
     Full = 0,
     Titles = 1,
     None = 2,
+    Borders = 3,
 }
 impl PaneFrameStyle {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -1213,6 +1214,7 @@ impl PaneFrameStyle {
             PaneFrameStyle::Full => "Full",
             PaneFrameStyle::Titles => "Titles",
             PaneFrameStyle::None => "None",
+            PaneFrameStyle::Borders => "Borders",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -1221,6 +1223,7 @@ impl PaneFrameStyle {
             "Full" => Some(Self::Full),
             "Titles" => Some(Self::Titles),
             "None" => Some(Self::None),
+            "Borders" => Some(Self::Borders),
             _ => None,
         }
     }

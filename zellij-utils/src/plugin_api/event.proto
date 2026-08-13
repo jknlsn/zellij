@@ -529,6 +529,7 @@ enum PaneFrameStyle {
     Full = 0;
     Titles = 1;
     None = 2;
+    Borders = 3;
 }
 
 message InputModeKeybinds {

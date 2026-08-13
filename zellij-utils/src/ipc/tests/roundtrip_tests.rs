@@ -464,7 +464,7 @@ fn test_client_messages() {
                 theme_dir: Some(PathBuf::from("theme_dir")),
                 mouse_mode: Some(true),
                 pane_frames: Some(true),
-                pane_frame_style: Some(PaneFrameStyle::Full),
+                pane_frame_style: Some(PaneFrameStyle::Borders),
                 mirror_session: Some(true),
                 on_force_close: Some(OnForceClose::Quit),
                 scroll_buffer_size: Some(100000),

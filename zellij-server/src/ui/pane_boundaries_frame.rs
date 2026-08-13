@@ -86,6 +86,7 @@ pub struct FrameParams {
     pub pane_is_stacked_over: bool,
     pub pane_is_stacked: bool,
     pub should_draw_pane_frames: bool,
+    pub draw_titles: bool,
     pub pane_is_floating: bool,
     pub content_offset: Offset,
     pub mouse_is_hovering_over_pane: bool,
@@ -119,6 +120,7 @@ pub struct PaneFrame {
     pane_is_stacked_under: bool,
     pane_is_stacked: bool,
     should_draw_pane_frames: bool,
+    draw_titles: bool,
     is_pinned: bool,
     is_floating: bool,
     content_offset: Offset,
@@ -158,6 +160,7 @@ impl PaneFrame {
             pane_is_stacked_under: frame_params.pane_is_stacked_under,
             pane_is_stacked: frame_params.pane_is_stacked,
             should_draw_pane_frames: frame_params.should_draw_pane_frames,
+            draw_titles: frame_params.draw_titles,
             is_pinned: false,
             is_floating: frame_params.pane_is_floating,
             content_offset: frame_params.content_offset,
@@ -1290,7 +1293,13 @@ impl PaneFrame {
             // if this is a stacked pane with pane frames off (and it doesn't necessarily have only
             // 1 row because it could also be a flexible stacked pane)
             // in this case we should always draw the pane title line, and only the title line
-            let mut one_line_title = self.render_one_line_title().with_context(err_context)?;
+            let mut one_line_title = if self.draw_titles {
+                self.render_one_line_title().with_context(err_context)?
+            } else if self.should_draw_pane_frames {
+                self.empty_title_line()
+            } else {
+                vec![EMPTY_TERMINAL_CHARACTER; self.geom.cols]
+            };
 
             if self.content_offset.right != 0 && !self.should_draw_pane_frames {
                 // here what happens is that the title should be offset to the right
@@ -1315,13 +1324,17 @@ impl PaneFrame {
             for row in 0..self.geom.rows {
                 if row == 0 {
                     // top row
-                    let title = self.render_title().with_context(err_context)?;
+                    let title = if self.draw_titles {
+                        self.render_title().with_context(err_context)?
+                    } else {
+                        self.empty_title_line()
+                    };
                     let x = self.geom.x;
                     let y = self.geom.y + row;
                     character_chunks.push(CharacterChunk::new(title, x, y));
                 } else if row == self.geom.rows - 1 {
                     // bottom row
-                    if self.highlight_tooltip.is_some() && self.is_main_client {
+                    if self.draw_titles && self.highlight_tooltip.is_some() && self.is_main_client {
                         let x = self.geom.x;
                         let y = self.geom.y + row;
                         character_chunks.push(CharacterChunk::new(
@@ -1330,7 +1343,11 @@ impl PaneFrame {
                             x,
                             y,
                         ));
-                    } else if self.show_help_text && self.is_main_client && self.mouse_hover_tips {
+                    } else if self.draw_titles
+                        && self.show_help_text
+                        && self.is_main_client
+                        && self.mouse_hover_tips
+                    {
                         let x = self.geom.x;
                         let y = self.geom.y + row;
                         character_chunks.push(CharacterChunk::new(
@@ -1339,9 +1356,11 @@ impl PaneFrame {
                             x,
                             y,
                         ));
-                    } else if self.mouse_is_hovering_over_pane
+                    } else if self.draw_titles
+                        && self.mouse_is_hovering_over_pane
                         && !self.is_main_client
                         && self.mouse_hover_tips
+                    {
                     {
                         let x = self.geom.x;
                         let y = self.geom.y + row;
@@ -1351,7 +1370,8 @@ impl PaneFrame {
                             x,
                             y,
                         ));
-                    } else if self.exit_status.is_some() || self.is_first_run {
+                    } else if self.draw_titles && (self.exit_status.is_some() || self.is_first_run)
+                    {
                         let x = self.geom.x;
                         let y = self.geom.y + row;
                         character_chunks.push(CharacterChunk::new(
@@ -1474,6 +1494,7 @@ mod tests {
                 pane_is_stacked_under: false,
                 pane_is_stacked: false,
                 should_draw_pane_frames: true,
+                draw_titles: true,
                 pane_is_floating: is_floating,
                 content_offset: Offset::default(),
                 mouse_is_hovering_over_pane: false,
@@ -1494,6 +1515,25 @@ mod tests {
 
     fn characters_to_string(chars: &[TerminalCharacter]) -> String {
         chars.iter().map(|c| c.character).collect()
+    }
+
+    #[test]
+    fn borders_style_draws_no_titles_or_help_text() {
+        let mut frame = pane_frame_with(false, false, 40);
+        frame.draw_titles = false;
+        let (chunks, _) = frame.render().unwrap();
+        let text: String = chunks
+            .iter()
+            .flat_map(|c| c.terminal_characters.iter())
+            .map(|c| c.character)
+            .collect();
+        // help text would render for the main client when show_help_text is true
+        assert!(!text.contains("MouseScroll"));
+        assert!(!text.contains("drag"));
+        // top row is a plain border, not a bracketed title
+        let top_row = characters_to_string(&chunks[0].terminal_characters);
+        assert!(top_row.starts_with('┌'));
+        assert!(top_row.ends_with('┐'));
     }
 
     #[test]

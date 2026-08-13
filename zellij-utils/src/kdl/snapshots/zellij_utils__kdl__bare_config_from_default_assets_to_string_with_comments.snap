@@ -1,5 +1,6 @@
 ---
 source: zellij-utils/src/kdl/mod.rs
+assertion_line: 7699
 expression: fake_config_stringified
 ---
 keybinds clear-defaults=true {
@@ -370,6 +371,7 @@ web_client {
 // Set the pane frame style when pane_frames is enabled
 // Options:
 //   - full
+//   - borders
 //   - titles (default)
 // 
 // pane_frame_style "titles"
