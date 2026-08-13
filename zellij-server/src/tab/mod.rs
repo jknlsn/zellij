@@ -3798,6 +3798,8 @@ impl Tab {
                 if let Some(pane) = self.get_pane_with_id_mut(pane_id) {
                     pane.set_bell_notification(true);
                 }
+                // tint the pane frame while the bell notification is pending
+                self.add_highlight_pane_frame_color_override(pane_id, None, None);
                 self.panes_with_pending_bell.insert(pane_id);
                 newly_notified_panes.push(pane_id);
             }

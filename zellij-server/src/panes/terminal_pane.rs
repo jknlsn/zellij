@@ -1104,7 +1104,7 @@ impl Pane for TerminalPane {
         _client_id: Option<ClientId>,
     ) {
         // TODO: if we have a client_id, we should only highlight the frame for this client
-        self.pane_frame_color_override = Some((self.style.colors.frame_highlight.emphasis_0, text));
+        self.pane_frame_color_override = Some((self.style.colors.ribbon_selected.emphasis_3, text));
     }
     fn clear_pane_frame_color_override(&mut self, _client_id: Option<ClientId>) {
         // TODO: if we have a client_id, we should only clear the highlight for this client

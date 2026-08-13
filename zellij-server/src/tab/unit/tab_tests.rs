@@ -16654,6 +16654,12 @@ pub fn bell_in_unfocused_pane_sets_notification() {
             .unwrap_or(false),
         "Pane 2 should have bell notification"
     );
+    assert!(
+        tab.get_pane_with_id(new_pane_id)
+            .map(|p| p.frame_color_override().is_some())
+            .unwrap_or(false),
+        "Pane 2 should have a frame colour override while the bell notification is pending"
+    );
 }
 
 #[test]
@@ -16690,6 +16696,12 @@ pub fn clearing_last_pane_bell_clears_tab_bell() {
     assert!(
         !tab.tab_has_pending_bell,
         "tab_has_pending_bell should be false after last pane bell cleared"
+    );
+    assert!(
+        tab.get_pane_with_id(new_pane_id)
+            .map(|p| p.frame_color_override().is_none())
+            .unwrap_or(false),
+        "Pane 2 frame colour override should be cleared with the bell notification"
     );
 }
 

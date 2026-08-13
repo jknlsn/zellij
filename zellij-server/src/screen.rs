@@ -10073,7 +10073,11 @@ pub(crate) fn screen_thread_main(
                 for pane_id in pane_ids {
                     for tab in all_tabs.values_mut() {
                         if tab.has_pane_with_pid(&pane_id) {
-                            tab.clear_pane_frame_color_override(pane_id, None);
+                            // don't clear the bell-notification tint while the notification is
+                            // still pending (the bell flash's timed clear would otherwise wipe it)
+                            if !tab.panes_with_pending_bell.contains(&pane_id) {
+                                tab.clear_pane_frame_color_override(pane_id, None);
+                            }
                             break;
                         }
                     }
