@@ -26,6 +26,10 @@ impl UiConfig {
 pub struct FrameConfig {
     pub rounded_corners: bool,
     pub hide_session_name: bool,
+    /// draw an empty column between side-by-side pane frames. terminal cells are roughly twice as
+    /// tall as they are wide, so a shared 1-cell gap reads as half as wide horizontally as it does
+    /// vertically - the extra column evens that out
+    pub column_gutter: bool,
 }
 
 impl FrameConfig {
@@ -33,6 +37,7 @@ impl FrameConfig {
         let mut merged = self.clone();
         merged.rounded_corners = other.rounded_corners;
         merged.hide_session_name = other.hide_session_name;
+        merged.column_gutter = other.column_gutter;
         merged
     }
 }

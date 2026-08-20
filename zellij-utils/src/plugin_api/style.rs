@@ -21,6 +21,8 @@ impl TryFrom<ProtobufStyle> for Style {
             colors: s,
             rounded_corners: protobuf_style.rounded_corners,
             hide_session_name: protobuf_style.hide_session_name,
+            // not carried over the plugin API - plugins don't render pane frames
+            column_gutter: false,
         })
     }
 }

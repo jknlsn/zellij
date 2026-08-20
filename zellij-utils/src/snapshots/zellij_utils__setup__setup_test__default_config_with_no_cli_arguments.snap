@@ -6286,6 +6286,7 @@ Config {
         pane_frames: FrameConfig {
             rounded_corners: false,
             hide_session_name: false,
+            column_gutter: false,
         },
     },
     env: {},

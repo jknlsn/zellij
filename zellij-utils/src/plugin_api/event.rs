@@ -2482,6 +2482,7 @@ fn serialize_mode_update_event_with_non_default_values() {
             // TODO: replace default
             rounded_corners: true,
             hide_session_name: false,
+            column_gutter: false,
         },
         capabilities: PluginCapabilities { arrow_fonts: false },
         session_name: Some("my awesome test session".to_owned()),

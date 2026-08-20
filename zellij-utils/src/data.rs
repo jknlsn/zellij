@@ -1388,6 +1388,7 @@ pub struct Style {
     pub colors: Styling,
     pub rounded_corners: bool,
     pub hide_session_name: bool,
+    pub column_gutter: bool,
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Deserialize, Serialize)]

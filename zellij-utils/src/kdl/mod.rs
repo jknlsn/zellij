@@ -5610,9 +5610,13 @@ impl UiConfig {
                     .unwrap_or(false);
             let hide_session_name =
                 kdl_get_child_entry_bool_value!(pane_frames, "hide_session_name").unwrap_or(false);
+            let column_gutter =
+                kdl_children_property_first_arg_as_bool!(pane_frames, "column_gutter")
+                    .unwrap_or(false);
             let frame_config = FrameConfig {
                 rounded_corners,
                 hide_session_name,
+                column_gutter,
             };
             ui_config.pane_frames = frame_config;
         }
@@ -5635,6 +5639,12 @@ impl UiConfig {
             let mut hide_session_name = KdlNode::new("hide_session_name");
             hide_session_name.push(KdlValue::Bool(true));
             frame_config_children.nodes_mut().push(hide_session_name);
+        }
+        if self.pane_frames.column_gutter {
+            has_ui_config = true;
+            let mut column_gutter = KdlNode::new("column_gutter");
+            column_gutter.push(KdlValue::Bool(true));
+            frame_config_children.nodes_mut().push(column_gutter);
         }
         if has_ui_config {
             frame_config.set_children(frame_config_children);
@@ -7565,6 +7575,7 @@ fn ui_config_to_string() {
             pane_frames {
                 rounded_corners true
                 hide_session_name true
+                column_gutter true
             }
         }"##;
     let document: KdlDocument = fake_config.parse().unwrap();

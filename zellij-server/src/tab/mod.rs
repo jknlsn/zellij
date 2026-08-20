@@ -7501,6 +7501,10 @@ impl Tab {
             pane.update_rounded_corners(rounded_corners);
         }
     }
+    pub fn update_column_gutter(&mut self, column_gutter: bool) {
+        self.style.column_gutter = column_gutter;
+        self.tiled_panes.update_pane_column_gutter(column_gutter);
+    }
     pub fn update_arrow_fonts(&mut self, should_support_arrow_fonts: bool) {
         self.arrow_fonts = should_support_arrow_fonts;
         self.floating_panes

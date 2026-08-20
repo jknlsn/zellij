@@ -101,6 +101,7 @@ pub struct FrameParams {
     pub mouse_hover_tips: bool,
     pub dimmed: bool,
     pub guest_choice_indicator: Option<GuestChoiceIndicator>,
+    pub right_gutter: bool,
 }
 
 #[derive(Default, PartialEq)]
@@ -135,6 +136,7 @@ pub struct PaneFrame {
     mouse_hover_tips: bool,
     dimmed: bool,
     guest_choice_indicator: Option<GuestChoiceIndicator>,
+    right_gutter: bool,
 }
 
 impl PaneFrame {
@@ -144,6 +146,13 @@ impl PaneFrame {
         main_title: String,
         frame_params: FrameParams,
     ) -> Self {
+        // ponytail: the gutter column stays inside the pane geom but nothing else paints it, so
+        // the frame shrinks by one and blanks the vacated column itself (see render)
+        let right_gutter = frame_params.right_gutter && geom.cols > 1;
+        let mut geom = geom;
+        if right_gutter {
+            geom.cols -= 1;
+        }
         PaneFrame {
             geom,
             title: main_title,
@@ -175,6 +184,7 @@ impl PaneFrame {
             mouse_hover_tips: frame_params.mouse_hover_tips,
             dimmed: frame_params.dimmed,
             guest_choice_indicator: frame_params.guest_choice_indicator,
+            right_gutter,
         }
     }
     pub fn is_pinned(mut self, is_pinned: bool) -> Self {
@@ -1280,6 +1290,18 @@ impl PaneFrame {
         if self.omit_title {
             return Ok((character_chunks, None));
         }
+        if self.right_gutter {
+            // nothing else draws this column, so blank it here or a glyph from a previous layout
+            // survives the diff-based render
+            let x = self.geom.x + self.geom.cols;
+            for row in 0..self.geom.rows {
+                character_chunks.push(CharacterChunk::new(
+                    vec![EMPTY_TERMINAL_CHARACTER],
+                    x,
+                    self.geom.y + row,
+                ));
+            }
+        }
         if let Some(entry) = &self.stack_list_entry {
             character_chunks.push(CharacterChunk::new(
                 self.render_stack_list_entry(entry),
@@ -1360,7 +1382,6 @@ impl PaneFrame {
                         && self.mouse_is_hovering_over_pane
                         && !self.is_main_client
                         && self.mouse_hover_tips
-                    {
                     {
                         let x = self.geom.x;
                         let y = self.geom.y + row;
@@ -1474,6 +1495,15 @@ mod tests {
     use zellij_utils::pane_size::{Offset, Viewport};
 
     fn pane_frame_with(mouse_scroll_resize: bool, is_floating: bool, cols: usize) -> PaneFrame {
+        pane_frame_with_gutter(mouse_scroll_resize, is_floating, cols, false)
+    }
+
+    fn pane_frame_with_gutter(
+        mouse_scroll_resize: bool,
+        is_floating: bool,
+        cols: usize,
+        right_gutter: bool,
+    ) -> PaneFrame {
         PaneFrame::new(
             Viewport {
                 x: 0,
@@ -1509,12 +1539,44 @@ mod tests {
                 mouse_hover_tips: true,
                 dimmed: false,
                 guest_choice_indicator: None,
+                right_gutter,
             },
         )
     }
 
     fn characters_to_string(chars: &[TerminalCharacter]) -> String {
         chars.iter().map(|c| c.character).collect()
+    }
+
+    #[test]
+    fn right_gutter_shrinks_the_frame_and_blanks_the_vacated_column() {
+        let mut frame = pane_frame_with(false, false, 40);
+        frame.draw_titles = false;
+        let (plain_chunks, _) = frame.render().unwrap();
+
+        let mut gutter_frame = pane_frame_with_gutter(false, false, 40, true);
+        gutter_frame.draw_titles = false;
+        let (gutter_chunks, _) = gutter_frame.render().unwrap();
+
+        // the frame is one column narrower
+        let plain_top = characters_to_string(&plain_chunks[0].terminal_characters);
+        let gutter_top = gutter_chunks
+            .iter()
+            .find(|c| c.terminal_characters.len() > 1)
+            .map(|c| characters_to_string(&c.terminal_characters))
+            .unwrap();
+        assert_eq!(plain_top.chars().count(), 40);
+        assert_eq!(gutter_top.chars().count(), 39);
+        assert!(gutter_top.starts_with('┌') && gutter_top.ends_with('┐'));
+
+        // every row of the vacated column is blanked, or a glyph from a previous layout survives
+        for row in 0..10 {
+            let blank = gutter_chunks
+                .iter()
+                .find(|c| c.x == 39 && c.y == row && c.terminal_characters.len() == 1);
+            assert!(blank.is_some(), "gutter column not blanked on row {row}");
+            assert_eq!(blank.unwrap().terminal_characters[0].character, ' ');
+        }
     }
 
     #[test]

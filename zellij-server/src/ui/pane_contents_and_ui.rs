@@ -36,6 +36,7 @@ pub struct PaneContentsAndUi<'a> {
     show_help_text: bool,
     omit_title: bool,
     frame_geom_override: Option<PaneGeom>,
+    right_gutter: bool,
     stack_list_entry_width: Option<usize>,
     stack_list_entry_is_selected: bool,
     stack_list_entry_stack_is_focused: bool,
@@ -97,6 +98,7 @@ impl<'a> PaneContentsAndUi<'a> {
             show_help_text,
             omit_title,
             frame_geom_override: None,
+            right_gutter: false,
             stack_list_entry_width: None,
             stack_list_entry_is_selected: false,
             stack_list_entry_stack_is_focused: false,
@@ -111,6 +113,9 @@ impl<'a> PaneContentsAndUi<'a> {
     }
     pub fn set_frame_geom_override(&mut self, frame_geom_override: Option<PaneGeom>) {
         self.frame_geom_override = frame_geom_override;
+    }
+    pub fn set_right_gutter(&mut self, right_gutter: bool) {
+        self.right_gutter = right_gutter;
     }
     pub fn set_blank_title(&mut self, blank_title: bool) {
         self.blank_title = blank_title;
@@ -390,6 +395,7 @@ impl<'a> PaneContentsAndUi<'a> {
                 mouse_hover_tips: self.mouse_hover_tips,
                 dimmed: frame_is_dimmed,
                 guest_choice_indicator,
+                right_gutter: self.right_gutter,
             }
         } else {
             FrameParams {
@@ -420,6 +426,7 @@ impl<'a> PaneContentsAndUi<'a> {
                 mouse_hover_tips: self.mouse_hover_tips,
                 dimmed: frame_is_dimmed,
                 guest_choice_indicator,
+                right_gutter: self.right_gutter,
             }
         };
 

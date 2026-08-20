@@ -64,6 +64,23 @@ fn pane_content_offset(position_and_size: &PaneGeom, viewport: &Viewport) -> (us
     (columns_offset, rows_offset)
 }
 
+// ponytail: terminal cells are roughly twice as tall as they are wide, so a shared 1-cell gap
+// reads as half as wide between side-by-side panes as it does between stacked ones. when
+// `column_gutter` is set we give up a column so both gaps look about the same.
+// upgrade path if this ever needs to be per-terminal: query the cell size and skip the gutter
+// when the ratio is already close to 1
+fn column_gutter_is_needed(
+    column_gutter: bool,
+    pane_frame_style: PaneFrameStyle,
+    position_and_size: &PaneGeom,
+    viewport: &Viewport,
+) -> bool {
+    column_gutter
+        && pane_frame_style.draws_full_frames()
+        && position_and_size.x + position_and_size.cols.as_usize() < viewport.cols
+        && position_and_size.cols.as_usize() > MIN_TERMINAL_WIDTH
+}
+
 pub struct TiledPanes {
     pub panes: BTreeMap<PaneId, Box<dyn Pane>>,
     display_area: Rc<RefCell<Size>>,
@@ -637,11 +654,17 @@ impl TiledPanes {
             #[allow(clippy::if_same_then_else)]
             if reserved_rows > 0 {
                 if draws_full_frames && !pane.borderless() {
+                    let gutter = column_gutter_is_needed(
+                        self.style.column_gutter,
+                        pane_frame_style,
+                        &pane.current_geom(),
+                        pane_viewport,
+                    );
                     pane.set_content_offset(Offset {
                         top: 1 + reserved_rows,
                         bottom: 1,
                         left: 1,
-                        right: 1,
+                        right: if gutter { 2 } else { 1 },
                     });
                 } else {
                     let position_and_size = pane.current_geom();
@@ -656,7 +679,16 @@ impl TiledPanes {
                     });
                 }
             } else if draws_full_frames && !pane.borderless() {
-                pane.set_content_offset(Offset::frame(1));
+                let mut content_offset = Offset::frame(1);
+                if column_gutter_is_needed(
+                    self.style.column_gutter,
+                    pane_frame_style,
+                    &pane.current_geom(),
+                    pane_viewport,
+                ) {
+                    content_offset.right = 2;
+                }
+                pane.set_content_offset(content_offset);
             } else if draws_full_frames && pane.borderless() {
                 pane.set_content_offset(Offset::default());
             } else if !is_inside_viewport(pane_viewport, pane) {
@@ -1242,6 +1274,12 @@ impl TiledPanes {
                 } else {
                     None
                 };
+                let pane_has_right_gutter = column_gutter_is_needed(
+                    self.style.column_gutter,
+                    self.pane_frame_style,
+                    &pane.current_geom(),
+                    &self.viewport.borrow(),
+                );
                 let pane_has_guest_modal = pane.has_guest_modal_for_any_client();
                 let mut pane_contents_and_ui = PaneContentsAndUi::new(
                     pane,
@@ -1263,6 +1301,7 @@ impl TiledPanes {
                     self.dimmed_clients.clone(),
                 );
                 pane_contents_and_ui.set_frame_geom_override(visible_member_frame_override);
+                pane_contents_and_ui.set_right_gutter(pane_has_right_gutter);
                 pane_contents_and_ui.set_blank_title(reserved_rows_for_pane > 0);
                 for client_id in &connected_clients {
                     let client_mode = self
@@ -3100,6 +3139,10 @@ impl TiledPanes {
             pane.update_rounded_corners(rounded_corners);
         }
     }
+    pub fn update_pane_column_gutter(&mut self, column_gutter: bool) {
+        // only read here when laying out frames, so no need to push it down to the panes
+        self.style.column_gutter = column_gutter;
+    }
     pub fn stack_panes(
         &mut self,
         root_pane_id: PaneId,
@@ -3170,4 +3213,70 @@ pub fn pane_geom_is_inside_viewport(viewport: &Viewport, geom: &PaneGeom) -> boo
         && geom.y + geom.rows.as_usize() <= viewport.y + viewport.rows
         && geom.x >= viewport.x
         && geom.x + geom.cols.as_usize() <= viewport.x + viewport.cols
+}
+
+#[cfg(test)]
+mod column_gutter_tests {
+    use super::*;
+    use zellij_utils::pane_size::Dimension;
+
+    fn geom(x: usize, cols: usize) -> PaneGeom {
+        PaneGeom {
+            x,
+            cols: Dimension::fixed(cols),
+            ..Default::default()
+        }
+    }
+
+    #[test]
+    fn gutter_needs_config_a_full_frame_and_a_right_neighbour() {
+        let viewport = Viewport {
+            x: 0,
+            y: 0,
+            rows: 20,
+            cols: 100,
+        };
+        // has a right neighbour
+        assert!(column_gutter_is_needed(
+            true,
+            PaneFrameStyle::Borders,
+            &geom(0, 50),
+            &viewport
+        ));
+        // the full style draws frames too, so it gets a gutter as well
+        assert!(column_gutter_is_needed(
+            true,
+            PaneFrameStyle::Full,
+            &geom(0, 50),
+            &viewport
+        ));
+        // off by default
+        assert!(!column_gutter_is_needed(
+            false,
+            PaneFrameStyle::Borders,
+            &geom(0, 50),
+            &viewport
+        ));
+        // flush against the right edge, nothing to separate from
+        assert!(!column_gutter_is_needed(
+            true,
+            PaneFrameStyle::Borders,
+            &geom(50, 50),
+            &viewport
+        ));
+        // styles without frames have no borders to space apart
+        assert!(!column_gutter_is_needed(
+            true,
+            PaneFrameStyle::Titles,
+            &geom(0, 50),
+            &viewport
+        ));
+        // too narrow to give up a column
+        assert!(!column_gutter_is_needed(
+            true,
+            PaneFrameStyle::Borders,
+            &geom(0, MIN_TERMINAL_WIDTH),
+            &viewport
+        ));
+    }
 }

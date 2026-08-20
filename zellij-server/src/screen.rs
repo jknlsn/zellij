@@ -793,6 +793,7 @@ pub enum ScreenInstruction {
         auto_layout: bool,
         rounded_corners: bool,
         hide_session_name: bool,
+        column_gutter: bool,
         stacked_resize: bool,
         stacked_pane_list: bool,
         default_editor: Option<PathBuf>,
@@ -6764,6 +6765,7 @@ impl Screen {
         auto_layout: bool,
         rounded_corners: bool,
         hide_session_name: bool,
+        column_gutter: bool,
         stacked_resize: bool,
         stacked_pane_list: bool,
         default_editor: Option<PathBuf>,
@@ -6827,6 +6829,8 @@ impl Screen {
         for tab in self.tabs.values_mut() {
             tab.update_theme(theme);
             tab.update_rounded_corners(rounded_corners);
+            // must come before set_pane_frames below - it decides the content offsets
+            tab.update_column_gutter(column_gutter);
             tab.update_default_shell(default_shell.clone());
             tab.update_default_editor(self.default_editor.clone());
             tab.update_auto_layout(auto_layout);
@@ -11425,6 +11429,7 @@ pub(crate) fn screen_thread_main(
                 auto_layout,
                 rounded_corners,
                 hide_session_name,
+                column_gutter,
                 stacked_resize,
                 stacked_pane_list,
                 default_editor,
@@ -11457,6 +11462,7 @@ pub(crate) fn screen_thread_main(
                         auto_layout,
                         rounded_corners,
                         hide_session_name,
+                        column_gutter,
                         stacked_resize,
                         stacked_pane_list,
                         default_editor,
